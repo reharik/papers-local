@@ -1,0 +1,53 @@
+{
+  "name": "passport-local",
+  "version": "1.0.0",
+  "description": "Local username and password authentication strategy for Passport.",
+  "keywords": [
+    "passport",
+    "local",
+    "auth",
+    "authn",
+    "authentication",
+    "username",
+    "password"
+  ],
+  "author": {
+    "name": "Jared Hanson",
+    "email": "jaredhanson@gmail.com",
+    "url": "http://www.jaredhanson.net/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jaredhanson/passport-local.git"
+  },
+  "bugs": {
+    "url": "http://github.com/jaredhanson/passport-local/issues"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "./lib",
+  "dependencies": {
+    "passport-strategy": "1.x.x"
+  },
+  "devDependencies": {
+    "chai": "3.x.x",
+    "chai-as-promised": "^6.0.0",
+    "chai-passport-strategy": "0.1.x",
+    "mocha": "3.x.x",
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-3": "^6.11.0",
+    "babel-register": "^6.14.0"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha --compilers js:babel-register --require babel-polyfill --reporter spec test/*.test.js"
+  }
+}
