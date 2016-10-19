@@ -1,14 +1,6 @@
-language: "node_js"
+language: node_js
 node_js:
-  - "0.12"
-  - "0.10"
-  - "iojs"
-
-before_install:
- - "npm install istanbul -g"
- - "npm install coveralls -g"
-
-script: "make ci-travis"
-
+  - "6"
 after_success:
-  - "make submit-cov-to-coveralls"
+  - npm install codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage/lcov.info

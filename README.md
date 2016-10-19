@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/reharik/papers-local.svg?branch=functional)](https://travis-ci.org/reharik/papers-local)
+[![Code Climate](https://codeclimate.com/github/reharik/papers-local/badges/gpa.svg)](https://codeclimate.com/github/reharik/papers-local)
+[![Test Coverage](https://codeclimate.com/github/reharik/papers-local/badges/coverage.svg)](https://codeclimate.com/github/reharik/papers-local/coverage)
 # papers-local
 
 [papers](https://www.npmjs.com/package/papers) strategy for authenticating with a username
