@@ -1,8 +1,9 @@
 {
   "name": "papers-local",
   "version": "1.0.0",
-  "description": "Local username and password authentication strategy for Passport.",
+  "description": "Promised based local username and password authentication strategy for Papers.",
   "keywords": [
+    "papers",
     "passport",
     "local",
     "auth",

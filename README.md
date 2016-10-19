@@ -1,25 +1,20 @@
-# passport-local
+# papers-local
 
-[![Build](https://travis-ci.org/jaredhanson/passport-local.png)](https://travis-ci.org/jaredhanson/passport-local)
-[![Coverage](https://coveralls.io/repos/jaredhanson/passport-local/badge.png)](https://coveralls.io/r/jaredhanson/passport-local)
-[![Quality](https://codeclimate.com/github/jaredhanson/passport-local.png)](https://codeclimate.com/github/jaredhanson/passport-local)
-[![Dependencies](https://david-dm.org/jaredhanson/passport-local.png)](https://david-dm.org/jaredhanson/passport-local)
-[![Tips](http://img.shields.io/gittip/jaredhanson.png)](https://www.gittip.com/jaredhanson/)
-
-
-[Passport](http://passportjs.org/) strategy for authenticating with a username
+[papers](https://www.npmjs.com/package/papers) strategy for authenticating with a username
 and password.
 
 This module lets you authenticate using a username and password in your Node.js
-applications.  By plugging into Passport, local authentication can be easily and
+applications.  By plugging into Papers, local authentication can be easily and
 unobtrusively integrated into any application or framework that supports
 [Connect](http://www.senchalabs.org/connect/)-style middleware, including
-[Express](http://expressjs.com/).
+[Express](http://expressjs.com/).  This strategy also works with both [KOA](http://koajs.com/) and [KOA2](https://github.com/koajs/koa#koa-v2)
+
+This module was ported from [passport-local](https://www.npmjs.com/package/passport-local) whose inspiration we greatly appreciate 
 
 ## Install
 
 ```bash
-$ npm install passport-local
+$ npm install papers-local
 ```
 
 ## Usage
@@ -27,17 +22,18 @@ $ npm install passport-local
 #### Configure Strategy
 
 The local authentication strategy authenticates users using a username and
-password.  The strategy requires a `verify` callback, which accepts these
-credentials and calls `done` providing a user.
+password.  The strategy requires a `validate` function, which accepts these
+credentials as well as passing in the request (ctx in KOA) and returns 
+either a user, a falsy or throws an error.
 
 ```js
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
-      return done(null, user);
+var localStrategy(
+  function(username, password, req) {
+    return User.findOne({ username: username }, function (err, user) {
+      if (err) { return throw(err); }
+      if (!user) { return false; }
+      if (!user.verifyPassword(password)) { return (false); }
+      return user;
     });
   }
 ));
@@ -45,7 +41,7 @@ passport.use(new LocalStrategy(
 
 ##### Available Options
 
-This strategy takes an optional options hash before the function, e.g. `new LocalStrategy({/* options */, callback})`.
+This strategy takes an optional options hash after the validate function, e.g. `localStrategy(validate, {/* options */})`.
 
 The available options are:
 
@@ -60,58 +56,30 @@ By default, `LocalStrategy` expects to find credentials in parameters
 named username and password. If your site prefers to name these fields
 differently, options are available to change the defaults.
 
-    passport.use(new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'passwd',
-        session: false
-      },
-      function(username, password, done) {
+    localStrategy(function(username, password, req) {
         // ...
-      }
-    ));
-
-When session support is not necessary, it can be safely disabled by
-setting the `session` option to false.
-
-The verify callback can be supplied with the `request` object by setting
-the `passReqToCallback` option to true, and changing callback arguments
-accordingly.
-
-    passport.use(new LocalStrategy({
+      }, {
         usernameField: 'email',
-        passwordField: 'passwd',
-        passReqToCallback: true,
-        session: false
-      },
-      function(req, username, password, done) {
-        // request object is now first argument
-        // ...
+        passwordField: 'passwd'
       }
-    ));
+    );
 
 #### Authenticate Requests
-
-Use `passport.authenticate()`, specifying the `'local'` strategy, to
-authenticate requests.
-
-For example, as route middleware in an [Express](http://expressjs.com/)
-application:
-
+Use `papers().registerMiddleware(config)` specifying  your localStrategy in the strategies config.
 ```js
-app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+var papersConfig = {
+  strategies: [ localStrategy ]
+}
+app.use(papers().registerMiddleware(config));
 ```
-
-## Examples
-
-Developers using the popular [Express](http://expressjs.com/) web framework can
-refer to an [example](https://github.com/passport/express-4.x-local-example)
-as a starting point for their own web applications.
-
-Additional examples can be found on the [wiki](https://github.com/jaredhanson/passport-local/wiki/Examples).
+or for a specific endpoint
+```js
+app.post('/profile', papers().registerMiddleware(config),
+    function(req, res) {
+        res.send(req.user.profile);
+    }
+);
+```
 
 ## Tests
 
@@ -122,10 +90,8 @@ $ npm test
 
 ## Credits
 
-- [Jared Hanson](http://github.com/jaredhanson)
+- Thank you to [Jared Hanson](http://github.com/jaredhanson) for passport, the inspiration for this library
 
 ## License
 
 [The MIT License](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2011-2015 Jared Hanson <[http://jaredhanson.net/](http://jaredhanson.net/)>
